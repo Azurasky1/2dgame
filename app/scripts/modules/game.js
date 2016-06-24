@@ -69,7 +69,7 @@
       (body1.pos.x + body1.frame.width < body2.pos.x) ||
       (body1.pos.x > body2.pos.x + body2.width) ||
       (body1.pos.y > body2.pos.y + body2.height) ||
-      (body1.pos.y + body1.height < body2.pos.y));
+      (body1.pos.y + body1.frame.height < body2.pos.y));
     };
 
     function isNotColliding(b1) {

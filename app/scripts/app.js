@@ -124,21 +124,18 @@
     } else if (keyState[KEY_SPACE]) {
       // pushes a new Projectile() object onto the projectiles array
       $PROJECTILE.createNew(this, projectiles, 'black');
-      console.log(projectiles.length);
     } else {
       // console.log('No keys being pressed right now');
     }
   };
 
-  Player.prototype.isColliding = function() {
+  Player.prototype.isColliding = function(projectiles) {
     for (var i = 0; i < projectiles.length; i++) {
-      var projectile = projectiles[i];
-      if ($GAME.collisionDetection(this, projectile) === false) {
+      if ($GAME.collisionDetection(this, projectiles[i]) === false) {
         player.health.percent -= 1;
-        console.log('collision!');
+        console.log("x: " + this.pos.x + ", y: " + this.pos.y + ", width: " + this.frame.width + ", height: " + this.frame.height);
+        console.log("projectile x: " + projectiles[i].pos.x + ", y: " + projectiles[i].pos.y + ", width: " + projectiles[i].width + ", height: " + projectiles[i].height);
         drawHitBox(csv, bodies, 'red');
-        console.log(this.health.percent);
-        console.log(playerHealth.width);
       }
     }
   };
@@ -255,8 +252,6 @@ var actionTimesTen;
     } else if (actionTimesTen >= 9 && actionTimesTen <= 10) {
       // pushes a new Projectile() object onto the projectiles array
       $PROJECTILE.createNew(this, projectiles, 'red');
-      console.log(projectiles.length);
-      console.log("firing projectiles!");
     } else {
 
       console.log('Dragon is stationary');
@@ -274,7 +269,7 @@ var actionTimesTen;
     );
   }
 
-  Enemy.prototype.isColliding = function() {
+  Enemy.prototype.isColliding = function(projectiles) {
     for (var i = 0; i < projectiles.length; i++) {
       if ($GAME.collisionDetection(this, projectiles[i]) === false) {
         this.health.percent -= .25;
@@ -341,10 +336,8 @@ dragon.spritesheet(dragonurl, 750, 560, 10, 8, 76, 80, 0, 0, 1, 8);
 
   bodies[0] = player;
   bodies[1] = dragon;
-  console.log(bodies.indexOf(player));
 
   function drawHitBox(canvas, bodies, color) {
-    console.log(bodies);
       csv.strokeStyle = color;
       csv.fillStyle = 'blue';
       csv.font = '30px Cambria';
@@ -377,8 +370,8 @@ dragon.spritesheet(dragonurl, 750, 560, 10, 8, 76, 80, 0, 0, 1, 8);
     $GAME.drawPlayer(csv, player);
     drawHitBox(csv, bodies, 'black');
     player.update(timeBetweenFrames);
-    player.isColliding();
-    dragon.isColliding();
+    player.isColliding(projectiles);
+    dragon.isColliding(projectiles);
     $GAME.nextFrame(player);
     playerHealth.update(player);
     playerHealth.drawBar(player);
