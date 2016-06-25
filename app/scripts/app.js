@@ -18,11 +18,14 @@
   var playerHealth;
   var dragonurl;
   var bodies = [];
-
+  var action;
+  var actionTimesTen;
   dragonurl = new Image();
   dragonurl.src = '/images/dragon.png';
+
   // keeps track of which keys are pressed
   var keyState = [];
+
   window.bodies = [];
 
   // set the canvas to the full page size
@@ -84,42 +87,92 @@
     this.avatar = null;
   }
 
-  Player.prototype.update = function(timeBetweenFrames) {
+  function move (anyPlayerOrEnemy, elapsed) {
+    switch(anyPlayerOrEnemy.direction.facing) {
+
+    case anyPlayerOrEnemy.direction.northWest: {
+      anyPlayerOrEnemy.pos.x -= anyPlayerOrEnemy.speed * elapsed;
+      anyPlayerOrEnemy.pos.y -= anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.northEast: {
+      anyPlayerOrEnemy.pos.x += anyPlayerOrEnemy.speed * elapsed;
+      anyPlayerOrEnemy.pos.y -= anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.southWest: {
+      anyPlayerOrEnemy.pos.x -= anyPlayerOrEnemy.speed * elapsed;
+      anyPlayerOrEnemy.pos.y += anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.southEast: {
+      anyPlayerOrEnemy.pos.x += anyPlayerOrEnemy.speed * elapsed;
+      anyPlayerOrEnemy.pos.y += anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.north: {
+      anyPlayerOrEnemy.pos.y -= anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.south: {
+      anyPlayerOrEnemy.pos.y += anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case  anyPlayerOrEnemy.direction.west: {
+      anyPlayerOrEnemy.pos.x -= anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+    case anyPlayerOrEnemy.direction.east: {
+      anyPlayerOrEnemy.pos.x += anyPlayerOrEnemy.speed * elapsed;
+    }
+    break;
+
+  }
+  }
+
+  Player.prototype.update = function(elapsed) {
     if (keyState[KEY_UP] && keyState[KEY_LEFT]) {
-      this.pos.x -= this.speed * timeBetweenFrames;
-      this.pos.y -= this.speed * timeBetweenFrames;
+      this.pos.x -= this.speed * elapsed;
+      this.pos.y -= this.speed * elapsed;
       this.animation.y = 0;
       bodies[0] = this;
     } else if (keyState[KEY_UP] && keyState[KEY_RIGHT]) {
-      this.pos.x += this.speed * timeBetweenFrames;
-      this.pos.y -= this.speed * timeBetweenFrames;
+      this.pos.x += this.speed * elapsed;
+      this.pos.y -= this.speed * elapsed;
       this.animation.y = 130;
       bodies[0] = this;
     } else if (keyState[KEY_DOWN] && keyState[KEY_LEFT]) {
-      this.pos.x -= this.speed * timeBetweenFrames;
-      this.pos.y += this.speed * timeBetweenFrames;
+      this.pos.x -= this.speed * elapsed;
+      this.pos.y += this.speed * elapsed;
       this.animation.y = 327;
       bodies[0] = this;
     } else if (keyState[KEY_DOWN] && keyState[KEY_RIGHT]) {
-      this.pos.x += this.speed * timeBetweenFrames;
-      this.pos.y += this.speed * timeBetweenFrames;
+      this.pos.x += this.speed * elapsed;
+      this.pos.y += this.speed * elapsed;
       this.animation.y = 454;
       bodies[0] = this;
     } else if (keyState[KEY_UP]) {
       this.animation.y = 65;
-      this.pos.y -= this.speed * timeBetweenFrames;
+      this.pos.y -= this.speed * elapsed;
       bodies[0] = this;
     } else if (keyState[KEY_DOWN]) {
       this.animation.y = 391;
-      this.pos.y += this.speed * timeBetweenFrames;
+      this.pos.y += this.speed * elapsed;
       bodies[0] = this;
     } else if (keyState[KEY_LEFT]) {
       this.animation.y = 260;
-      this.pos.x -= this.speed * timeBetweenFrames;
+      this.pos.x -= this.speed * elapsed;
       bodies[0] = this;
     } else if (keyState[KEY_RIGHT]) {
       this.animation.y = 194;
-      this.pos.x += this.speed * timeBetweenFrames;
+      this.pos.x += this.speed * elapsed;
       bodies[0] = this;
     } else if (keyState[KEY_SPACE]) {
       // pushes a new Projectile() object onto the projectiles array
@@ -168,7 +221,18 @@
 
     this.animation = {
       x: 0,
-      y: 0
+      y: 0,
+    };
+    this.direction = {
+      facing: '',
+      north: 0,
+      south: 0,
+      east: 0,
+      west: 0,
+      northEast: 0,
+      northWest :0,
+      southEast: 0,
+      southWest: 0,
     };
 
     this.pos = {
@@ -176,8 +240,19 @@
       y: screenHeight / 2 - ((519 / 8) / 2)
     };
 
-    this.speed = 1;
+    this.speed = .05;
     this.avatar = null;
+  }
+
+  function getDirectionPositions (anyPlayerOrEnemy, first, second, third, fourth, fifth, sixth, seventh, eigth) {
+    anyPlayerOrEnemy.direction[first] = 77;
+    anyPlayerOrEnemy.direction[second] = anyPlayerOrEnemy.frame.height;
+    anyPlayerOrEnemy.direction[third] = anyPlayerOrEnemy.frame.height * 2;
+    anyPlayerOrEnemy.direction[fourth] = anyPlayerOrEnemy.frame.height * 3;
+    anyPlayerOrEnemy.direction[fifth] = anyPlayerOrEnemy.frame.height * 4;
+    anyPlayerOrEnemy.direction[sixth] = anyPlayerOrEnemy.frame.height * 5;
+    anyPlayerOrEnemy.direction[seventh] = anyPlayerOrEnemy.frame.height * 6;
+    anyPlayerOrEnemy.direction[eigth] = anyPlayerOrEnemy.frame.height * 7;
   }
 
   Enemy.prototype.spritesheet = function (url, spritesheetX, spritesheetY, framesPerLine, amountOfRows, frameWidth, frameHeight, start, current, next, end) {
@@ -198,62 +273,64 @@
          total: framesPerLine,
          amountOfRows: amountOfRows,
          currentRow: 0,
-         width: frameWidth || spritesheetX / this.frame.total,
-         height: frameHeight || spritesheetY / this.frame.amountOfRows,
+         width: frameWidth || spritesheetX / framesPerLine,
+         height: frameHeight || spritesheetY / amountOfRows,
          start: start || 0,
          current: current | 0,
          next: next || 1,
-         end: end || totalPerLine,
+         end: end || framesPerLine,
        }
 
      }
 
    }
 
-var action;
-var actionTimesTen;
-  Enemy.prototype.update = function (timeBetweenFrames) {
+  Enemy.prototype.update = function (elapsed) {
+    this.frame.current = 0;
     if (actionTimesTen > 0 && actionTimesTen < 1.25) {
-      this.pos.x -= this.speed * timeBetweenFrames * .1;
-      this.pos.y -= this.speed * timeBetweenFrames * .1;
-      // this.animation.y = this.frame.current * this.frame.height;
+      this.direction.facing = this.direction.northWest;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 1.25 && actionTimesTen < 2.50) {
-      this.pos.x += this.speed * timeBetweenFrames * .1;
-      this.pos.y -= this.speed * timeBetweenFrames * .1;
-      // this.animation.y = this.frame.current * this.frame.height;
+      this.direction.facing = this.direction.northEast;
+      this.animation.y = this.direction.facing;
+      move(this,elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 2.50 && actionTimesTen < 3.75) {
-      this.pos.x -= this.speed * timeBetweenFrames * .1;
-      this.pos.y += this.speed * timeBetweenFrames * .1;
-      // this.animation.y = this.frame.current * this.frame.height;
+      this.direction.facing = this.direction.southWest;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 3.75 && actionTimesTen < 5) {
-      this.pos.x += this.speed * timeBetweenFrames * .1;
-      this.pos.y += this.speed * timeBetweenFrames * .1;
-      // this.animation.y = this.frame.current * this.frame.height;
+      this.direction.facing = this.direction.southEast;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 5 && actionTimesTen < 6.250) {
-      // this.animation.y = this.frame.current * this.frame.height;
-      this.pos.y -= this.speed * timeBetweenFrames * .1;
+      this.direction.facing = this.direction.north;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 6.250 && actionTimesTen < 7.500) {
-      // this.animation.y = this.frame.current * this.frame.height;
-      this.pos.y += this.speed * timeBetweenFrames * .1;
+      this.direction.facing = this.direction.south;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 7.500 && actionTimesTen < 8.750) {
-      // this.animation.y = this.frame.current * this.frame.height;
-      this.pos.x -= this.speed * timeBetweenFrames * .001;
+      this.direction.facing = this.direction.west;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 8.750 && actionTimesTen < 9) {
-      //this.animation.y = this.frame.current * this.frame.height;
-      this.pos.x += this.speed * timeBetweenFrames * .001;
+      this.direction.facing = this.direction.east;
+      this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[1] = this;
     } else if (actionTimesTen >= 9 && actionTimesTen <= 10) {
       // pushes a new Projectile() object onto the projectiles array
       $PROJECTILE.createNew(this, projectiles, 'red');
     } else {
-
       console.log('Dragon is stationary');
     }
   }
@@ -261,8 +338,8 @@ var actionTimesTen;
   Enemy.prototype.draw = function (url, canvas) {
     csv.drawImage(
       url,
-      this.frame.width * this.frame.current,
-      this.animation.y,
+      (this.frame.width) * this.frame.current,
+      this.direction.facing,
       this.frame.width, this.frame.height,
       this.pos.x, this.pos.y,
       this.frame.width, this.frame.height
@@ -281,7 +358,8 @@ var actionTimesTen;
   };
 
 var dragon = new Enemy(100, 100);
-dragon.spritesheet(dragonurl, 750, 560, 10, 8, 76, 80, 0, 0, 1, 8);
+dragon.spritesheet(dragonurl, 720, 560, 9, 8);
+getDirectionPositions(dragon, ['east'], ['southEast'], ['south'], ['southWest'], ['west'], ['northWest'], ['north'], ['northEast']);
 
 
   /**
@@ -363,13 +441,13 @@ dragon.spritesheet(dragonurl, 750, 560, 10, 8, 76, 80, 0, 0, 1, 8);
   /**
    * [updateEverythingThenDraw description]
    *
-   * @param  {Number} timeBetweenFrames [description]
+   * @param  {Number} elapsed [description]
    */
-  function updateEverythingThenDraw(timeBetweenFrames) {
+  function updateEverythingThenDraw(elapsed) {
     $GAME.drawBoard(csv);
     $GAME.drawPlayer(csv, player);
     drawHitBox(csv, bodies, 'black');
-    player.update(timeBetweenFrames);
+    player.update(elapsed);
     player.isColliding(projectiles);
     dragon.isColliding(projectiles);
     $GAME.nextFrame(player);
@@ -379,9 +457,9 @@ dragon.spritesheet(dragonurl, 750, 560, 10, 8, 76, 80, 0, 0, 1, 8);
     dragonHealth.update(dragon);
     $PROJECTILE.draw(projectiles, csv);
     $PROJECTILE.update(projectiles);
+    dragon.update(elapsed);
     dragon.draw(dragonurl);
     $GAME.nextFrame(dragon);
-    dragon.update(timeBetweenFrames);
   }
 
   /**
