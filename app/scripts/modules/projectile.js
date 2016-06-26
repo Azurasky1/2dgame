@@ -39,32 +39,32 @@
     switch (anyPlayerOrEnemy.direction.facing) {
 
       case anyPlayerOrEnemy.direction.northWest: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x - 10;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y - 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x - 20;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y - 20;
         projectile.velocity.x = -20;
         projectile.velocity.y = -20;
       }
       break;
 
       case anyPlayerOrEnemy.direction.northEast: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 10;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y - 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 20;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y - 20;
         projectile.velocity.x = 20;
         projectile.velocity.y = -20;
       }
       break;
 
       case anyPlayerOrEnemy.direction.southWest: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x - 10;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.height + 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x - 20;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.height + 20;
         projectile.velocity.x = -20;
         projectile.velocity.y = 20;
       }
       break;
 
       case anyPlayerOrEnemy.direction.southEast: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 10;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.height + 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 20;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.height + 20;
         projectile.velocity.x = 20;
         projectile.velocity.y = 20;
       }
@@ -72,7 +72,7 @@
 
       case anyPlayerOrEnemy.direction.north: {
         projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width / 2;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y - 10;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y - 20;
         projectile.velocity.x = 0;
         projectile.velocity.y = -20;
       }
@@ -80,14 +80,14 @@
 
       case anyPlayerOrEnemy.direction.south: {
         projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width / 2;
-        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.width + 10;
+        projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.width + 20;
         projectile.velocity.x = 0;
         projectile.velocity.y = 20;
       }
       break;
 
       case anyPlayerOrEnemy.direction.west: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x - 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x - 20;
         projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.width / 2;
         projectile.velocity.x = -20;
         projectile.velocity.y = 0;
@@ -95,7 +95,7 @@
       break;
 
       case anyPlayerOrEnemy.direction.east: {
-        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 10;
+        projectile.pos.x = anyPlayerOrEnemy.pos.x + anyPlayerOrEnemy.frame.width + 20;
         projectile.pos.y = anyPlayerOrEnemy.pos.y + anyPlayerOrEnemy.frame.height / 2;
         projectile.velocity.x = 20;
         projectile.velocity.y = 0;
