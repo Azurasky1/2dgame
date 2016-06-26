@@ -152,7 +152,7 @@
 
   }
   }
-
+  
   Player.prototype.update = function(anyPlayerOrEnemyelapsed) {
     if (keyState[KEY_UP] && keyState[KEY_LEFT]) {
       this.pos.x -= this.speed * elapsed;
@@ -166,42 +166,39 @@
       console.log(this);
       bodies[0] = this;
     } else if (keyState[KEY_UP] && keyState[KEY_RIGHT]) {
-      this.pos.x += this.speed * elapsed;
-      this.pos.y -= this.speed * elapsed;
       this.direction.facing = this.direction.northEast;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_DOWN] && keyState[KEY_LEFT]) {
-      this.pos.x -= this.speed * elapsed;
-      this.pos.y += this.speed * elapsed;
       this.direction.facing = this.direction.southWest;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_DOWN] && keyState[KEY_RIGHT]) {
-      this.pos.x += this.speed * elapsed;
-      this.pos.y += this.speed * elapsed;
       this.direction.facing = this.direction.southEast;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_UP]) {
-      this.pos.y -= this.speed * elapsed;
       this.direction.facing = this.direction.north;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_DOWN]) {
-      this.pos.y += this.speed * elapsed;
       this.direction.facing = this.direction.south;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_LEFT]) {
-      this.pos.x -= this.speed * elapsed;
       this.direction.facing = this.direction.west;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_RIGHT]) {
-      this.pos.x += this.speed * elapsed;
       this.direction.facing = this.direction.east;
       this.animation.y = this.direction.facing;
+      move(this, elapsed);
       bodies[0] = this;
     } else if (keyState[KEY_SPACE]) {
       // pushes a new Projectile() object onto the projectiles array
